@@ -136,7 +136,7 @@
     "..B.B.B.B.B..",
     "....B...B....",
     "....B...B....",
-    "...BBB.BBB...",
+    "...B.B.B.B...",
     ".....EEE.....",
   ];
 
@@ -333,11 +333,13 @@
   function moveTank(tank, dir) {
     tank.dir = dir;
     const d = DIRS[dir];
-    let nx = tank.x + d.x * tank.speed;
-    let ny = tank.y + d.y * tank.speed;
-    // 分轴移动，贴墙滑动
-    if (!tankCollides(tank, nx, tank.y)) tank.x = nx;
-    else if (!tankCollides(tank, tank.x, ny)) tank.y = ny;
+    const nx = tank.x + d.x * tank.speed;
+    const ny = tank.y + d.y * tank.speed;
+    // 四方向移动：整体判断目标位置是否相撞，撞墙则停在原地（仍会转向）
+    if (!tankCollides(tank, nx, ny)) {
+      tank.x = nx;
+      tank.y = ny;
+    }
     // 限制在画布内
     tank.x = Math.max(0, Math.min(C - tank.size, tank.x));
     tank.y = Math.max(0, Math.min(C - tank.size, tank.y));
